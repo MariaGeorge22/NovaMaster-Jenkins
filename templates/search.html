@@ -1,0 +1,80 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{% static 'style/home.css' %}">
+	<link rel="stylesheet" href="{% static 'style/search.css' %}">
+	<link rel="icon" type="image/png" href="{% static 'img/Log/NovaVerse.svg' %}" sizes="32x32">
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+	<title>NovaVerse</title>
+</head>
+
+<body>
+
+	{% include 'nav.html' %}
+
+	<!-- ================ main ================ -->
+	<main>
+		<div class="container">
+			<!-- ================ left ================ -->
+			<div class="left">
+				{% include 'sidebar.html' %}
+			</div>
+			<!-- ================ End of left ================ -->
+
+			<!-- ================ search results ================ -->
+			<!-- ================ friend requests ================ -->
+			<div class="results">
+				<h1>Search Results</h1>
+				{% for user in users %}
+				<div class="result">
+					<div class="info">
+						<div class="profile-photo">
+							<a href="{% url 'profile' user.username %}">
+								{% if user.profile.picture %}
+								<img src="{{ user.profile.picture.url }}" alt="">
+								{% else %}
+								<img src="{% static 'img/default.jpg' %}" alt="Default Profile Picture">
+								{% endif %}
+							</a>
+						</div>
+						<div>
+							<a href="{% url 'profile' user.username %}">
+								<h5>{{user.first_name}} {{user.last_name}}</h5>
+								<p class="text-muted">
+									@{{user.username}}
+								</p>
+							</a>
+						</div>
+					</div>
+					<div class="action">
+						{% if not user.follow_status %}
+						<a href="{% url 'follow' user.username 1 %}" class="btn btn-primary">Follow</a>
+						{% else %}
+						<a href="{% url 'follow' user.username 0 %}" class="btn btn-primary">Unfollow</a>
+						{% endif %}
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+		<!-- ================ right ================ -->
+
+
+		</div>
+		</div>
+		<!-- ================ middle ================ -->
+		</div>
+	</main>
+
+
+	{% include 'themes.html' %}
+	<script src="{% static 'js/home.js' %}"></script>
+
+</body>
+
+</html>

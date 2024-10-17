@@ -1,0 +1,207 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{% static 'style/home.css' %}">
+	<link rel="stylesheet" href="{% static 'style/postdetail.css' %}">
+	<link rel="icon" type="image/png" href="{% static 'img/Log/NovaVerse.svg' %}" sizes="32x32">
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+	<title>NovaVerse</title>
+	<style>
+		main .container {
+			grid-template-columns: 15vw auto;
+		}
+	</style>
+</head>
+
+<body>
+	{% include "nav.html" %}
+	<!-- ================ Profile ================ -->
+	<main>
+		<div class="container">
+			<!-- ================ left ================ -->
+			<div class="left">
+				<a href="{% url 'profile' user.username %}" class="profile">
+					<div class="profile-photo">
+						{% if user.profile.picture.url %}
+						<img src="{{ user.profile.picture.url }}" alt="">
+						{% else %}
+						<img src="{% static 'img/default.jpg' %}" alt="Default Profile Picture">
+						{% endif %}
+					</div>
+					<div class="handle">
+						<h4>{{request.user.first_name}} {{request.user.last_name}}</h4>
+						<p class="text-muted">
+							@{{request.user.username}}
+						</p>
+					</div>
+				</a>
+				{% include 'sidebar.html' %}
+			</div>
+			<!-- ================ End of left ================ -->
+
+
+			<!-- ================ middle ================ -->
+			<div class="middle">
+				<!-- ================ feeds ================ -->
+				<div class="feeds">
+					<!-- ================ feed one================ -->
+					<div class="feed">
+						<div class="head">
+							<div class="user">
+								<div class="profile-photo">
+									<img src="{{ post_user_profile.picture.url}}">
+								</div>
+								<div class="info">
+									<a href="{% url 'profile' post.user.username %}">
+										<h3>{{ post.user.username }}</h3>
+									</a>
+									<small>{{ post.posted }}</small>
+								</div>
+							</div>
+							<span class="edit">
+								<i class='bx bx-dots-horizontal-rounded'></i>
+							</span>
+						</div>
+						<div class="photo">
+							<img src="{{ post.picture.url }}">
+						</div>
+
+						<div class="action-buttons">
+							<div class="interaction-buttons">
+								<span>
+									<a href="{% url 'like' post.id %}" class="like-button" data-id="{{ post.id }}">
+										<i id="like-icon-{{ post.id }}"
+											class='bx bxs-heart {% if post.liked %} liked {% endif %}'></i>
+									</a>
+								</span>
+								<span><i class='bx bxs-comment-detail'></i></span>
+								<span><i class='bx bxs-share-alt'></i></span>
+							</div>
+							<div class="bookmark">
+								<span>
+									<a href="{% url 'favourite' post.id %}" class="favourite-button"
+										data-id="{{post.id}}">
+										<i class='bx bxs-bookmark {% if post.is_favourite %} liked {% endif %}'></i>
+									</a>
+								</span>
+							</div>
+						</div>
+						<div class="liked-by">
+							<span><img src="{% static 'img/profile-10.jpg' %}"></span>
+							<span><img src="{% static 'img/profile-11.jpg' %}"></span>
+							<span><img src="{% static 'img/profile-12.jpg' %}"></span>
+							<p><b id="like-count-{{ post.id }}"> {{ post.likes }}
+								</b> likes</p>
+						</div>
+						<div class="caption">
+							<p>
+								{{post.caption}}
+
+								{% for tag in post.tags.all %}
+								<a href="{{tag.get_absolute_url}}"><span class="harsh-tag">
+										#{{tag.title}}</span></a>
+								{% endfor %}
+							</p>
+						</div>
+						<div class="comments">
+
+							{% for comment in comments %}
+							<div class="comment">
+								<div class="photo">
+									<img src="{{comment.profile.picture.url}}">
+								</div>
+								<div class="body">
+									<h3>{{comment.user.username}}</h3>
+									<h4>{{comment.body}}</h4>
+									<h6 class="text-muted">{{comment.date}}</h6>
+								</div>
+							</div>
+							{% endfor %}
+
+						</div>
+						<div class="create-comment">
+							<form method="post">
+								{% csrf_token %}
+								<div class="input-group">
+									{{ form.body }}
+								</div>
+								<button type="submit" class="btn btn-primary">Comment</button>
+							</form>
+						</div>
+					</div>
+					<!-- ================ end of feed one ================ -->
+				</div>
+			</div>
+			<!-- ================ middle ================ -->
+		</div>
+	</main>
+	{% include 'themes.html' %}
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="{% static 'js/home.js' %}"></script>
+	<script>
+		$(document).ready(function () {
+			$('.like-button').click(function (e) {
+				e.preventDefault();
+				var post_id = $(this).data('id');
+				var csrf_token = '{{ csrf_token }}';
+				var like_url = $(this).attr('href');
+
+				$.ajax({
+					type: 'POST',
+					url: like_url,
+					data: {
+						'csrfmiddlewaretoken': csrf_token,
+					},
+					success: function (response) {
+						console.log('Success:', response); // Debugging
+						$('#like-count-' + post_id).text(response.likes);
+						if (response.liked) {
+							$('#like-icon-' + post_id).addClass('liked');
+						} else {
+							$('#like-icon-' + post_id).removeClass('liked');
+						}
+					},
+					error: function (response) {
+						console.log('Error:', response); // Debugging
+					}
+				});
+			});
+		});
+	</script>
+	<script>
+		$(document).ready(function () {
+			$('.favourite-button').click(function (e) {
+				e.preventDefault();
+				var button = $(this);
+				var post_id = button.data('id');
+				var url = button.attr('href');
+
+				$.ajax({
+					type: 'POST',
+					url: url,
+					data: {
+						'csrfmiddlewaretoken': '{{ csrf_token }}',
+					},
+					success: function (response) {
+						if (response.is_favourite) {
+							button.find('i').addClass('liked');
+						} else {
+							button.find('i').removeClass('liked');
+						}
+					},
+					error: function (response) {
+						console.error('Error:', response);
+					}
+				});
+			});
+		});
+	</script>
+</body>
+
+</html>

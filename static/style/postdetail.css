@@ -1,0 +1,43 @@
+.middle .feed .create-comment form{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+
+}
+
+.middle .feed .create-comment form input{
+	width: 30rem;
+	margin-top: 1rem;
+	background: transparent;
+	color: #fff;
+}
+
+.middle .feed .create-comment form buttom{
+	width: 30rem;
+	margin-top: 1rem;
+	background: transparent;
+	color: #fff;
+}
+
+.middle .feed .comments .comment{
+	display: flex;
+	flex-direction: row;
+}
+
+.middle .feed .comments .comment .body{
+	margin: 0.5rem;
+}
+.middle .feed .comments .comment .body h3{
+	color: var(--colour-success);
+}
+
+.middle .feed .comments .comment .photo{
+		width: 2.8rem;
+		height: 2.8rem;
+		display: block;
+		border-radius: 50%;
+		overflow: hidden;
+		border: 2px solid white;
+		margin-left: -0.6rem;
+}
+

@@ -1,0 +1,27 @@
+
+  /* static/css/styles.css */
+
+.wrapper div > h3{
+	color: #fff;
+	text-align: center;
+}
+
+.wrapper div > h2{
+	color: #fff;
+	text-align: center;
+	margin-bottom: -5rem;
+}
+
+  .input-group{
+	position: relative;
+	margin: 15px 0;
+	border-bottom: 2px solid #fff;
+  }
+
+  .input-group label{
+	transform: translateY(-10%);
+  }
+
+  .input-group input{
+	color: rgb(127, 189, 255);
+  }

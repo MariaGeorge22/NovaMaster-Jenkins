@@ -1,0 +1,25 @@
+{% load static %}
+
+<!-- ================ NavBar ================ -->
+<nav>
+	<div class="container">
+		<h2 class="logo">
+			NovaVerse
+		</h2>
+		<div class="search-bar">
+			<form action="{% url 'search' %}" method="get">
+				{% csrf_token %}
+				<i class='bx bx-search'></i>
+				<input name='q' type="search" placeholder="Search NovaVerse">
+				<button type="submit" hidden></button>
+			</form>
+
+		</div>
+		<div class="create">
+			<div class="profile-photo">
+				<img src="{% static 'img/Log/NovaVerse.svg' %}" alt="">
+			</div>
+		</div>
+	</div>
+</nav>
+<!-- ================ end of NavBar ================ -->

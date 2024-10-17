@@ -1,0 +1,231 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{% static 'style/home.css' %}">
+	<link rel="icon" type="image/png" href="{% static 'img/Log/NovaVerse.svg' %}" sizes="32x32">
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+	<title>NovaVerse</title>
+</head>
+
+<body>
+	{% include "nav.html" %}
+	<!-- ================ Profile ================ -->
+	<main>
+		<div class="container">
+			<!-- ================ left ================ -->
+			<div class="left">
+				<a href="{% url 'profile' user.username %}" class="profile">
+					<div class="profile-photo">
+						{% if user.profile.picture.url %}
+						<img src="{{ user.profile.picture.url }}" alt="">
+						{% else %}
+						<img src="{% static 'img/default.jpg' %}" alt="Default Profile Picture">
+						{% endif %}
+					</div>
+					<div class="handle">
+						<h4>{{request.user.first_name}} {{request.user.last_name}}</h4>
+						<p class="text-muted">
+							@{{request.user.username}}
+						</p>
+					</div>
+				</a>
+				{% include 'sidebar.html' %}
+			</div>
+			<!-- ================ End of left ================ -->
+
+
+			<!-- ================ middle ================ -->
+			<div class="middle">
+				<!-- ================ create-post ================ -->
+				<div class="create-post">
+					<div class="profile-photo">
+						<img src="{{profile.picture.url}}">
+					</div>
+					<input type="text" placeholder="Share your Wonderful news!" id="create-post" readonly>
+					<a href="{% url 'new-post' %}"><input type="submit" class="btn btn-primary" value="create"></a>
+				</div>
+				<!-- ================ feeds ================ -->
+				<div class="feeds">
+
+					{% for post in posts %}
+					<!-- ================ feed one================ -->
+					<div class="feed">
+						<div class="head">
+							<div class="user">
+								<div class="profile-photo">
+									<img src="{{ post.profilePicture.url }}">
+								</div>
+								<div class="info">
+									<a href="{% url 'profile' post.user.username %}">
+										<h3>{{ post.user.first_name }} {{ post.user.last_name }}</h3>
+									</a>
+									<small>{{ post.posted }}</small>
+								</div>
+							</div>
+							<span class="edit">
+								<i class='bx bx-dots-horizontal-rounded'></i>
+							</span>
+						</div>
+						<div class="photo">
+							<a href="{% url 'post-detail' post.id %}"><img src="{{ post.picture.url }}"></a>
+						</div>
+
+						<div class="action-buttons">
+							<div class="interaction-buttons">
+								<span>
+									<a href="{% url 'like' post.id %}" class="like-button" data-id="{{ post.id }}">
+										<i id="like-icon-{{ post.id }}"
+											class='bx bxs-heart {% if post.liked %}liked{% endif %}'></i>
+									</a>
+								</span>
+								<span><i class='bx bxs-comment-detail'></i></span>
+								<span><i class='bx bxs-share-alt'></i></span>
+							</div>
+							<div class="bookmark">
+								<span>
+									<a href="{% url 'favourite' post.id %}" class="favourite-button"
+										data-id="{{post.id}}">
+										<i class='bx bxs-bookmark {% if post.is_favourite %}liked{% endif %}'></i>
+									</a>
+								</span>
+							</div>
+						</div>
+						<div class="liked-by">
+							<span><img src="{% static 'img/profile-10.jpg' %}"></span>
+							<span><img src="{% static 'img/profile-11.jpg' %}"></span>
+							<span><img src="{% static 'img/profile-12.jpg' %}"></span>
+							<p><b id="like-count-{{ post.id }}"> {{ post.likes }}
+								</b> likes</p>
+						</div>
+						<div class="caption">
+							<p>
+								{{post.caption}}
+
+								{% for tag in post.tags.all %}
+								<a href="{{tag.get_absolute_url}}"><span class="harsh-tag">
+										#{{tag.title}}</span></a>
+								{% endfor %}
+							</p>
+						</div>
+						<div class="comment text-muted">
+							view all comments
+						</div>
+					</div>
+					<!-- ================ end of feed one ================ -->
+					{% endfor %}
+				</div>
+			</div>
+			<!-- ================ middle ================ -->
+
+
+			<!-- ================ right ================ -->
+			<div class="right">
+				<!-- ================ friend requests ================ -->
+				<div class="friend-requests">
+					<h4>People you might know</h4>
+
+					{% for profile in unfollowed_users_profiles %}
+					<div class="request">
+						<div class="info">
+							<div class="profile-photo">
+								<a href="{% url 'profile' profile.user.username %}">
+									{% if profile.picture %}
+									<img src="{{ profile.picture.url }}" alt="">
+									{% else %}
+									<img src="{% static 'img/default.jpg' %}" alt="Default Profile Picture">
+									{% endif %}
+								</a>
+							</div>
+							<div>
+								<h5>{{profile.first_name}} {{profile.last_name}}</h5>
+								<p class="text-muted">
+									@{{profile.user.username}}
+								</p>
+							</div>
+						</div>
+						<div class="action">
+							{% if not follow_status %}
+							<a href="{% url 'follow' profile.user.username 1 %}" class="btn btn-primary">Follow</a>
+							{% else %}
+							<a href="{% url 'follow' profile.user.username 0 %}" class="btn btn-primary">Unfollow</a>
+							{% endif %}
+						</div>
+					</div>
+					{% endfor %}
+
+				</div>
+			</div>
+			<!-- ================ right ================ -->
+
+		</div>
+	</main>
+	{% include 'themes.html' %}
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="{% static 'js/home.js' %}"></script>
+	<script>
+		$(document).ready(function () {
+			$('.like-button').click(function (e) {
+				e.preventDefault();
+				var post_id = $(this).data('id');
+				var csrf_token = '{{ csrf_token }}';
+				var like_url = $(this).attr('href');
+
+				$.ajax({
+					type: 'POST',
+					url: like_url,
+					data: {
+						'csrfmiddlewaretoken': csrf_token,
+					},
+					success: function (response) {
+						console.log('Success:', response); // Debugging
+						$('#like-count-' + post_id).text(response.likes);
+						if (response.liked) {
+							$('#like-icon-' + post_id).addClass('liked');
+						} else {
+							$('#like-icon-' + post_id).removeClass('liked');
+						}
+					},
+					error: function (response) {
+						console.log('Error:', response); // Debugging
+					}
+				});
+			});
+		});
+	</script>
+	<script>
+		$(document).ready(function () {
+			$('.favourite-button').click(function (e) {
+				e.preventDefault();
+				var button = $(this);
+				var post_id = button.data('id');
+				var url = button.attr('href');
+
+				$.ajax({
+					type: 'POST',
+					url: url,
+					data: {
+						'csrfmiddlewaretoken': '{{ csrf_token }}',
+					},
+					success: function (response) {
+						if (response.is_favourite) {
+							button.find('i').addClass('liked');
+						} else {
+							button.find('i').removeClass('liked');
+						}
+					},
+					error: function (response) {
+						console.error('Error:', response);
+					}
+				});
+			});
+		});
+	</script>
+
+</body>
+
+</html>

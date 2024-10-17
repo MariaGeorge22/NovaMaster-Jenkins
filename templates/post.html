@@ -1,0 +1,43 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{% static 'style/login.css' %}">
+	<link rel="stylesheet" href="{% static 'style/post.css' %}">
+	<link rel="icon" type="image/png" href="{% static 'img/Log/NovaVerse.svg' %}" sizes="32x32">
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+	<title>Create Post</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<div>
+			<h2>Create Post</h2>
+		</div>
+		<div class="form-wrapper">
+			<form method="post" enctype="multipart/form-data" action="">
+				{% csrf_token %}
+				<div class="input-group">
+					{{ form.picture }}
+				</div>
+				<div class="input-group">
+					{{ form.caption }}
+					<label>Post Caption</label>
+				</div>
+				<div class="input-group">
+					{{ form.tags }}
+					<label>Post Tags</label>
+				</div>
+				<button type="submit" class="btn btn-primary">Create Post</button>
+			</form>
+		</div>
+
+	</div>
+
+</body>
+
+</html>

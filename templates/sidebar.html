@@ -1,0 +1,91 @@
+{% load static %}
+
+<!-- ================ side-bar ================ -->
+<div class="sidebar">
+	<a href="{% url 'home' %}" class="menu-item">
+		<span><i class='bx bx-home'></i></span>
+		<h3>Home</h3>
+	</a>
+	<a class="menu-item" id="notifications">
+		<span><i class='bx bxs-bell'><small class="notifications-count">9+</small></i></span>
+		<h3>Notifications</h3>
+		<!-- ================ notification Pop-Up ================ -->
+		<div class="notifications-popup">
+			<div>
+				<div class="profile-photo">
+					<img src="{% static 'img/profile-1.jpg' %}">
+				</div>
+				<div class="notifications-body">
+					<b>Loki Oden</b> Accepted your friend request
+					<small class="text-muted">Days Ago</small>
+				</div>
+			</div>
+			<div>
+				<div class="profile-photo">
+					<img src="{% static 'img/profile-2.jpg' %}">
+				</div>
+				<div class="notifications-body">
+					<b>Thor Oden</b> Commented on your post
+					<small class="text-muted">Days Ago</small>
+				</div>
+			</div>
+			<div>
+				<div class="profile-photo">
+					<img src="{% static 'img/profile-3.jpg' %}">
+				</div>
+				<div class="notifications-body">
+					<b>Hella Oden</b> liked your post
+					<small class="text-muted">Days Ago</small>
+				</div>
+			</div>
+			<div>
+				<div class="profile-photo">
+					<img src="{% static 'img/profile-4.jpg' %}">
+				</div>
+				<div class="notifications-body">
+					<b>Oden</b> Accepted your friend request
+					<small class="text-muted">Days Ago</small>
+				</div>
+			</div>
+			<div>
+				<div class="profile-photo">
+					<img src="{% static 'img/profile-5.jpg' %}">
+				</div>
+				<div class="notifications-body">
+					<b>Loki</b> Accepted your friend request
+					<small class="text-muted">Days Ago</small>
+				</div>
+			</div>
+			<div>
+				<div class="profile-photo">
+					<img src="{% static 'img/profile-6.jpg' %}">
+				</div>
+				<div class="notifications-body">
+					<b>Loki</b> Accepted your friend request
+					<small class="text-muted">Days Ago</small>
+				</div>
+			</div>
+		</div>
+	</a>
+	<a href="{% url 'inbox' %}" class="menu-item" id="messages-notifications">
+		<span><i class='bx bxs-message-dots'><small class="notifications-count">6</small></i></span>
+		<h3>Messages</h3>
+	</a>
+	<a href="{% url 'saved' %}" class="menu-item">
+		<span><i class='bx bxs-bookmarks'></i></span>
+		<h3>Bookmarks</h3>
+	</a>
+	<a class="menu-item" id="theme">
+		<span><i class='bx bxs-palette'></i></span>
+		<h3>Themes</h3>
+	</a>
+	<a class="menu-item">
+		<span><i class='bx bxs-cog'></i></span>
+		<h3>Settings</h3>
+	</a>
+	<a href="{% url 'sign-out' %}" class="menu-item">
+		<span><i class='bx bx-log-out'></i></span>
+		<h3>Log out</h3>
+	</a>
+</div>
+<!-- ================ end of side-bar ================ -->

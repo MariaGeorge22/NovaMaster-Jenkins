@@ -1,0 +1,77 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{% static 'style/home.css' %}">
+	<link rel="stylesheet" href="{% static 'style/messages.css' %}">
+	<link rel="icon" type="image/png" href="{% static 'img/Log/NovaVerse.svg' %}" sizes="32x32">
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+	<title>NovaVerse</title>
+</head>
+
+<body>
+	{% include 'nav.html' %}
+
+	<!-- ================ main ================ -->
+	<main>
+		<div class="container">
+			<!-- ================ left ================ -->
+			<div class="left">
+				{% include 'sidebar.html' %}
+			</div>
+			<!-- ================ End of left ================ -->
+
+			<!-- ================ middle ================ -->
+			<div class="middle">
+				<div class="messages-wrapper">
+					<div class="contacts">
+
+						{% for message in messages %}
+						<a href="{% url 'direct' message.user.username%}">
+							<div class="contact">
+								<div class="profile-photo">
+									{% if message.user.profile.picture %}
+									<img src="{{ message.user.profile.picture.url }}" alt="">
+									{% else %}
+									<img src="{% static 'img/default.jpg' %}" alt="Default Profile Picture">
+									{% endif %}
+								</div>
+								<div class="handle">
+									<h4>{{message.user.first_name}} {{message.user.last_name}}</h4>
+									<p class="text-muted">
+										{{message.last}}
+									</p>
+								</div>
+							</div>
+						</a>
+						{% endfor %}
+
+						<!-- Add more contacts as needed -->
+					</div>
+					<div class="chat">
+						<div class="no-messages">
+						</div>
+						<div class="messages">
+						</div>
+						<div class="input-bar">
+							<input type="text" id="message-input" placeholder="Type a message">
+							<button class="btn btn-primary" id="send-button">Send</button>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<!-- ================ middle ================ -->
+		</div>
+	</main>
+
+
+	{% include 'themes.html' %}
+	<script src="{% static 'js/home.js' %}"></script>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+
+
+main .container{
+	display: grid;
+	grid-template-columns: 18vw auto;
+	column-gap: 2rem;
+	position: relative;
+}
+
+.middle .profile{
+	display: grid;
+	grid-template-columns: auto auto;
+	gap: 2rem;
+	justify-content: center;
+	margin-top: 3rem;
+
+}
+
+.middle .profile .profile-photo{
+	width: 12rem;
+}
+
+.middle .profile .user-info{
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.middle .profile .account-stats{
+	display: flex;
+	gap: 0.8rem;
+}
+
+.middle .profile .account-stats h4 > small{
+	margin-left: 0.1rem;
+}
